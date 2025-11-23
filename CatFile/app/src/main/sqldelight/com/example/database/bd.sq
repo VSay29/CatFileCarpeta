@@ -1,0 +1,50 @@
+-- CREAR TABLAS
+
+CREATE TABLE user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    correoElectronico TEXT NOT NULL,
+    nombreUsuario TEXT NOT NULL,
+    password TEXT NOT NULL
+);
+
+CREATE TABLE file (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idUsuario INTEGER NOT NULL,
+    nombreArchivo TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
+    peso INTEGER NOT NULL,
+    ruta TEXT NOT NULL,
+    numDescargas INTEGER,
+    fechaSubida TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idUsuario) REFERENCES user(id) ON DELETE CASCADE
+);
+
+-- FUNCIONES
+
+-- INSERCIONES
+registrarUsuario:
+INSERT INTO user (correoElectronico, nombreUsuario, password) VALUES(?,?,?);
+subirArchivo:
+INSERT INTO file (idUsuario, nombreArchivo, descripcion, peso, ruta, numDescargas, fechaSubida) VALUES(?,?,?,?,?,0,?);
+
+-- MODIFICACIONES
+modificarUsuario:
+UPDATE user SET correoElectronico = ?, nombreUsuario = ?, password = ? WHERE id = ?;
+modificarArchivo:
+UPDATE file SET nombreArchivo = ?, descripcion = ?, ruta = ?;
+descargarArchivo:
+UPDATE file SET numDescargas = numDescargas + 1 WHERE id = ?;
+
+-- DELETES
+borrarUsuario:
+DELETE FROM user WHERE id = ?;
+borrarArchivo:
+DELETE FROM file WHERE id = ?;
+
+-- SELECTS
+getUsers:
+SELECT * FROM user;
+getArchivos:
+SELECT * FROM file;
+iniciarSesion:
+SELECT * FROM user WHERE nombreUsuario = ? AND password = ?;
